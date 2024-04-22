@@ -1,0 +1,16 @@
+{
+  "name": "game_engine_jhinpan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "game_engine_web.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

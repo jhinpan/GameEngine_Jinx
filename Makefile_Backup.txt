@@ -1,0 +1,45 @@
+# Makefile
+
+# Compiler
+CXX = clang++
+# change it to emcc
+
+# Include directories
+INCLUDES = -I./glm -I./rapidjson
+# Adjusted include paths for SDL2 on Apple Silicon
+# SDL2 is in ports by using --use-port=sdl2
+# Also for sdl2_image, sdl2_mixer, sdl2_ttf
+# And for --use-port=sdl2_image:formats=png
+INCLUDES += -I/opt/homebrew/include/SDL2 -I./
+INCLUDES += -I./Lua -I./LuaBridge
+INCLUDES += -I./box2d/include -I./box2d/include/box2d -I./box2d -I./box2d/dynamics
+
+# Compiler flags
+CXXFLAGS = -std=c++17 -Wall -Wextra -O3 $(INCLUDES)
+
+# SDL2 Flags for Apple Silicon
+SDL2_FLAGS = -L/opt/homebrew/lib -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+
+# Linker flags
+LDFLAGS = $(SDL2_FLAGS) -llua5.4
+
+# Name of the final executable
+EXECUTABLE = game_engine_linux
+
+# Source files
+SOURCES = main.cpp $(wildcard box2d/*.cpp) Actor.cpp
+
+# Object files (ensure they are generated in the current directory or a specific build directory)
+OBJECTS = $(SOURCES:%.cpp=%.o)
+
+# Rule for making the final executable
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $^ $(LDFLAGS) -o $@
+
+# Rule for making object files
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Clean
+clean:
+	rm -f $(OBJECTS) $(EXECUTABLE)

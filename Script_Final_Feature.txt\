@@ -1,0 +1,14 @@
+# Script for the Final Customized Feature of EECS498-Game Engine Architecture - HTML Template & Web Interactive Editor
+
+HTML Template part:
+- first show the web build version on jhinpan.github.io/Game_Engine_Jinx/ (mainly show the ugly emscripten logo and console)
+- saying that in order to solve this, we design several different html templates for user to choose
+- showing the switch_and_build.sh & Makefile & setup_and_build.sh to show that we can switch from all those different html templates
+- Now introduce the three basic templates: Minimal shell, Dark shell, and Retro shell.
+- show the minimal_shell.html, dark_shell.html, and retro_shell.html with their effects.
+- All those HTML are mainly about
+
+Web Interactive Editor:
+- Then saying that we want to have a more interactive html template for user to use -> we design web interactive editor for user to design the map that they want for specific level design.
+- show the server.js and interactive_shell.html : server & client side
+- Explain whether we should make the re-compilation process more automatic

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Interactive Game Map Editor</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; text-align: center; }
+        h1 { color: #333; }
+        .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
+        canvas.emscripten { border: 0px none; background-color: black; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(20, 20px);
+            gap: 2px;
+            justify-content: center;
+        }
+        .cell {
+            width: 20px;
+            height: 20px;
+            background: #ccc;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .active { background: #666; }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 30px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .legend {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Interactive Game Map Editor</h1>
+<div class="legend">
+    <div class="legend-item"><div class="legend-color" style="background:#faa;"></div>Static</div>
+    <div class="legend-item"><div class="legend-color" style="background:#afa;"></div>Player</div>
+    <div class="legend-item"><div class="legend-color" style="background:#aaf;"></div>Bouncy</div>
+    <div class="legend-item"><div class="legend-color" style="background:#ffa;"></div>Victory</div>
+    <div class="legend-item"><div class="legend-color" style="background:#ccc;"></div>Empty</div>
+</div>
+<div class="grid" id="mapGrid"></div>
+<button onclick="saveMap()">Save Map</button>
+<!--<button onclick="recompileMap()">Recompile Map</button> &lt;!&ndash; New button for recompiling the map &ndash;&gt;-->
+<script>
+    const tileTypes = { 0: 'empty', 1: 'static', 2: 'player', 3: 'bouncy', 4: 'victory' };
+    let mapData = Array(20).fill().map(() => Array(20).fill(0));
+
+    function drawMap() {
+        const grid = document.getElementById('mapGrid');
+        grid.innerHTML = '';
+        mapData.forEach((row, y) => {
+            row.forEach((cell, x) => {
+                const cellDiv = document.createElement('div');
+                cellDiv.className = 'cell';
+                cellDiv.addEventListener('click', () => toggleTile(x, y));
+                if (cell !== 0) {
+                    cellDiv.classList.add('active');
+                    cellDiv.style.backgroundColor = getTileColor(cell);
+                }
+                grid.appendChild(cellDiv);
+            });
+        });
+    }
+
+    function toggleTile(x, y) {
+        mapData[y][x] = (mapData[y][x] + 1) % Object.keys(tileTypes).length;
+        drawMap();
+    }
+
+    function getTileColor(type) {
+        switch (type) {
+            case 1: return '#faa'; case 2: return '#afa'; case 3: return '#aaf'; case 4: return '#ffa'; default: return '#ccc';
+        }
+    }
+
+    function convertMapToLua(map) {
+        let luaRows = map.map(row => '{ ' + row.join(', ') + ' }');
+        let luaTable = '{\n' + luaRows.join(',\n') + '\n}';
+        console.log("Formatted Lua map data:", luaTable);
+        return luaTable;
+    }
+
+    function saveMap() {
+        const luaMapData = convertMapToLua(mapData);
+        fetch('/update-map', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({mapData: luaMapData})
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                window.location.reload(true);
+            })
+            .catch(error => {
+                console.error('Error updating map:', error);
+                alert('Failed to update map: ' + error.message);
+            });
+    }
+
+    // function recompileMap() {
+    //     fetch('/recompile-map', { method: 'POST' })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             alert(data.message); // Alerts the user with the response message
+    //         })
+    //         .catch(error => {
+    //             console.error('Error recompiling map:', error);
+    //             alert('Failed to recompile map: ' + error.message);
+    //         });
+    // }
+
+    drawMap();
+</script>
+{{{ SCRIPT }}}
+</body>
+</html>

@@ -1,0 +1,9 @@
+For the first question:
+Start by explaining the specific benefits and implications of your custom feature in a way that connects directly to the needs and interests of your audience:
+
+"My custom feature involves using Emscripten as the sole compiler toolchain to convert our C++ game engine into Web Assembly. This is significant because it streamlines the process for developers and enthusiasts who wish to explore or utilize our game engine. Typically, setting up a game engine involves extensive configuration, including the tedious tasks of managing header files and linking libraries. By compiling the engine into Web Assembly, we eliminate these barriers, enabling users to run the engine directly in their web browsers. This drastically reduces setup time and makes our technology accessible to a wider audience, enhancing user engagement and fostering a community of contributors."
+
+For the second question:
+Clarify your achievements and outline your next steps in a structured manner that highlights your project management skills and future vision:
+
+"This past week, I successfully integrated the Emscripten library into our project, which involved refactoring the main file and rewriting the makefile to support Web Assembly compilation. The result is both a functional local server and a github page deployment that serves as a proof of concept for web-based application of our game engine. Looking ahead to next week, my focus will be on two main enhancements. First, I plan to incorporate the web build of our game engine into my professional portfolio jhinpan.github.io, which involves designing a user-friendly HTML template to improve the interface and user interaction. Second, to cater to gaming enthusiasts like myself who prefer physical controllers, I will try implementing joystick support. This addition is aimed at expanding the functionality of our engine and providing a more immersive experience for users."
